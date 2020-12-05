@@ -119,7 +119,11 @@ class Queen():
         else:
             return False  
     
-        
+    def takes_validity_check(self,takes_position):
+        if(abs(self.position[0]-takes_position[0])==abs(self.position[1]-takes_position[1]) or (self.position[0] == takes_position[0] or self.position[1] == takes_position[1]) ):
+            return True
+        else:
+            return False    
         
 class chessboard():
     def __init__(self):
@@ -143,8 +147,6 @@ class chessboard():
             self.board[int(position[0])][int(position[1])] = self.pieces[i].symbol
             
         
-  
-  
     def invalid_check(self,new_position,piece_index):
         if(self.pieces[piece_index].invalid_check_move(new_position)):
             if(self.board[new_position[0]][new_position[1]]== "_"):
@@ -156,9 +158,10 @@ class chessboard():
         piece_index = self.index_finder(initial_position)
         takes_index = self.index_finder(takes_position)
         if(takes_index != -1) and (self.pieces[piece_index].color != self.pieces[takes_index].color):
-          if(self.pieces[piece_index].takes_validity_check(takes_position) and self.pieces[piece_index].invalid_check_move(takes_position)):
-            self.pieces[piece_index].position = takes_position
+          if(self.pieces[piece_index].takes_validity_check(takes_position) and self.pieces[piece_index].invalid_check_move(takes_position)):  
             self.delete_pieces(takes_position)
+            new_piece_index = self.index_finder(initial_position)
+            self.pieces[new_piece_index].position = takes_position
             self.update_board()
         else:
           print("are maa chudi padi hai - chessboard")
@@ -263,7 +266,6 @@ class chessboard():
             print("Are Maa Chudi Padi Hai  -pawn")
             
             
-            
     def move(self,initial_position,new_position):
       piece_index = self.index_finder(initial_position) 
       piece = self.pieces[piece_index].symbol
@@ -297,14 +299,28 @@ class chessboard():
     
 game = chessboard()
 game.update_board()
-game.move([6,3], [5,3])
-game.move([7,3],[6,3])
-game.move([6,3],[4,1])
-# game.move([2,0],[4,2])
-# game.move([6,4],[5,4])
-# game.takes_takes([4,2], [7,5])
-# game.takes_takes([7,7],[7,5])
 
+
+
+# #Moves to check movement of Queen
+# game.move([6,3], [5,3])
+# game.move([7,3],[6,3])
+# game.move([6,3],[4,1])
+
+# #move to check Queen takes
+# game.takes_takes([4,1],[1,1])
+# game.takes_takes([1,1],[0,2])
+# game.takes_takes([0,4],[0,2])
+# print(game.pieces[game.index_finder([0,2])].color)
+
+
+# #Set of moves to test bug 0.1's correction
+# game.move([1,1], [2,1]) #pawn move
+# game.move([0,2],[2,0])#bishop to 2,0
+# game.move([6,4],[5,4])#pawn move
+# game.takes_takes([2,0], [7,5]) #bishop takes 7,5 bishop
+# game.takes_takes([7,7],[7,5]) #rook takes bishop
+# print(game.pieces[game.index_finder([7,5])].color)
 
 
 
