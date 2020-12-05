@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Dec  5 07:27:09 2020
+
+@author: mehul
+"""
+
 def array_maker():
   array = []
   for i in range(8):
@@ -29,27 +36,27 @@ class pawn():
     self.is_on_board = True
     pass
   
-  def invalid_check_move(self,new_pos):
+  def invalid_check_move(self,new_position):
     if(self.color == "black"):
-        if (new_pos[0]==self.position[0]+1 and new_pos[1]==self.position[1]):
+        if (new_position[0]==self.position[0]+1 and new_position[1]==self.position[1]):
             return True
         else:
             return False
     else:
-        if(new_pos[0] == self.position[0]-1 and new_pos[1] == self.position[1]):
+        if(new_position[0] == self.position[0]-1 and new_position[1] == self.position[1]):
             return True
         else:
             return False
         pass
     pass
-  def takes_validity_check(self,takes_pos):
+  def takes_validity_check(self,takes_position):
     if(self.color == "black"):
-      if(takes_pos[0]==self.position[0]+1 and (takes_pos[1]==self.position[1]+1 or takes_pos[1]==self.position[1]-1)):
+      if(takes_position[0]==self.position[0]+1 and (takes_position[1]==self.position[1]+1 or takes_position[1]==self.position[1]-1)):
         return True
       else:
         return False
     else:
-      if(takes_pos[0]==self.position[0]-1 and (takes_pos[1]==self.position[1]+1 or takes_pos[1]==self.position[1]-1)):
+      if(takes_position[0]==self.position[0]-1 and (takes_position[1]==self.position[1]+1 or takes_position[1]==self.position[1]-1)):
         return True
       else:
         return False
@@ -63,12 +70,19 @@ class rook():
     self.color=color
     pass
   
-  def invalid_check_move(self,new_pos):
-    if(self.position[0] == new_pos[0] or self.position[1] == new_pos[1]):
+  def invalid_check_move(self,new_position):
+    if(self.position[0] == new_position[0] or self.position[1] == new_position[1]):
       return True
       
     else:
       return False
+   
+  def takes_validity_check(self,takes_position):
+      if(takes_position[0]==self.position[0]  or takes_position[1]==self.position[1]):
+        return True
+      else:
+        return False
+    
   
 class bishop():
     def __init__(self,position,color):
@@ -78,21 +92,44 @@ class bishop():
         self.is_on_board=True
         self.color=color
         pass
-    def invalid_check_move(self,new_pos):
-        if(abs(self.position[0]-new_pos[0])==abs(self.position[1]-new_pos[1])):
+    def invalid_check_move(self,new_position):
+        if(abs(self.position[0]-new_position[0])==abs(self.position[1]-new_position[1])):
             return True
         else:
             return False
+        
+    def takes_validity_check(self,takes_position):
+      if(abs(takes_position[0]-self.position[0]) == abs(takes_position[1]-self.position[1])):
+        return True
+      else:
+        return False
   
+class Queen():
+    def __init__(self,position,color):
+        self.value = 9
+        self.position = position
+        self.symbol = "Q"
+        self.is_on_board=True
+        self.color=color
+        pass
+    
+    def invalid_check_move(self,new_position):
+        if(abs(self.position[0]-new_position[0])==abs(self.position[1]-new_position[1]) or self.position[0] == new_position[0] or self.position[1] == new_position[1] ):
+            return True
+        else:
+            return False  
+    
+        
+        
 class chessboard():
     def __init__(self):
-        self.pawns = [bishop([7,2],"white"),bishop([7,5],"white"),bishop([0,2],"black"),bishop([0,5],"black"),rook([7,0],"white"),rook([7,7],"white"),rook([0,0],"black"),rook([0,7],"black"),pawn([6,0],"white"),pawn([6,1],"white"),pawn([6,2],"white"),pawn([6,3],"white"),pawn([6,4],"white"),pawn([6,5],"white"),pawn([6,6],"white"),pawn([6,7],"white"),pawn([1,0],"black"),pawn([1,1],"black"),pawn([1,2],"black"),pawn([1,3],"black"),pawn([1,4],"black"),pawn([1,5],"black"),pawn([1,6],"black"),pawn([1,7],"black")]
+        self.pieces = [Queen([0,4],"black"),Queen([7,3],"white"),bishop([7,2],"white"),bishop([7,5],"white"),bishop([0,2],"black"),bishop([0,5],"black"),rook([7,0],"white"),rook([7,7],"white"),rook([0,0],"black"),rook([0,7],"black"),pawn([6,0],"white"),pawn([6,1],"white"),pawn([6,2],"white"),pawn([6,3],"white"),pawn([6,4],"white"),pawn([6,5],"white"),pawn([6,6],"white"),pawn([6,7],"white"),pawn([1,0],"black"),pawn([1,1],"black"),pawn([1,2],"black"),pawn([1,3],"black"),pawn([1,4],"black"),pawn([1,5],"black"),pawn([1,6],"black"),pawn([1,7],"black")]
         self.deleted = []
         self.board = array_maker()
         
-    def index_finder(self,input_position):
-        for i in range(len(self.pawns)):
-            if(self.pawns[i].position == input_position):
+    def index_finder(self,initial_position):
+        for i in range(len(self.pieces)):
+            if(self.pieces[i].position == initial_position):
                 return i
         else:
           return -1
@@ -101,132 +138,147 @@ class chessboard():
         for i in range(8):
           for j in range(8):
             self.board[i][j] = "_"
-        for i in range(len(self.pawns)):
-            position = self.pawns[i].position
-            self.board[int(position[0])][int(position[1])] = self.pawns[i].symbol
+        for i in range(len(self.pieces)):
+            position = self.pieces[i].position
+            self.board[int(position[0])][int(position[1])] = self.pieces[i].symbol
             
         
   
   
-    def invalid_check(self,new_pos,pawn_index):
-        if(self.pawns[pawn_index].invalid_check_move(new_pos)):
-            if(self.board[new_pos[0]][new_pos[1]]== "_"):
+    def invalid_check(self,new_position,piece_index):
+        if(self.pieces[piece_index].invalid_check_move(new_position)):
+            if(self.board[new_position[0]][new_position[1]]== "_"):
                 return True
         else:
             return False
             
-            
-            
-    def takes_takes(self,initial_position,takes_pos):
-        pawn_index = self.index_finder(initial_position)
-        takes_index = self.index_finder(takes_pos)
-        if(self.pawns[pawn_index].takes_validity_check(takes_pos)):
-          if(takes_index != -1) and (self.pawns[takes_index].color != self.pawns[pawn_index].color):
-            self.delete_pieces(takes_pos)
-            self.pawns[pawn_index].position = takes_pos
+    def takes_takes(self,initial_position,takes_position):
+        piece_index = self.index_finder(initial_position)
+        takes_index = self.index_finder(takes_position)
+        if(takes_index != -1) and (self.pieces[piece_index].color != self.pieces[takes_index].color):
+          if(self.pieces[piece_index].takes_validity_check(takes_position) and self.pieces[piece_index].invalid_check_move(takes_position)):
+            self.pieces[piece_index].position = takes_position
+            self.delete_pieces(takes_position)
             self.update_board()
         else:
-          print("are maa chudi padi hai")
+          print("are maa chudi padi hai - chessboard")
          
-    def invalid_check_rook(self,in_pos,new_pos):
-      piece_index = self.index_finder(in_pos)
+    def invalid_check_rook(self,initial_position,new_position):
+      piece_index = self.index_finder(initial_position)
       answer = True
-      if(self.pawns[piece_index].invalid_check_move(new_pos)):
-        if(in_pos[0] == new_pos[0]):
-          if(new_pos[1] - in_pos[1]>0):
-            for i in range(1,new_pos[1] - in_pos[1]+1):
-              if(self.board[in_pos[0]][in_pos[1]+i] != "_"):
+      if(self.pieces[piece_index].invalid_check_move(new_position)):
+        if(initial_position[0] == new_position[0]):
+          if(new_position[1] - initial_position[1]>0):
+            for i in range(1,new_position[1] - initial_position[1]+1):
+              if(self.board[initial_position[0]][initial_position[1]+i] != "_"):
                 answer = False
+                break
           else:
-            for i in range(1,in_pos[1] - new_pos[1]+1):
-              if(self.board[in_pos[0]][in_pos[1]-i] != "_"):
+            for i in range(1,initial_position[1] - new_position[1]+1):
+              if(self.board[initial_position[0]][initial_position[1]-i] != "_"):
                 answer = False
+                break
         else:
-          if(new_pos[0] - in_pos[0]>0):
-            for i in range(1,new_pos[0] - in_pos[0]+1):
-              if(self.board[in_pos[0]+i][in_pos[1]] != "_"):
+          if(new_position[0] - initial_position[0]>0):
+            for i in range(1,new_position[0] - initial_position[0]+1):
+              if(self.board[initial_position[0]+i][initial_position[1]] != "_"):
                 answer = False
+                break
           else:
-            for i in range(1,in_pos[0] - new_pos[0]+1):
-              if(self.board[in_pos[0]-i][in_pos[1]] != "_"):
+            for i in range(1,initial_position[0] - new_position[0]+1):
+              if(self.board[initial_position[0]-i][initial_position[1]] != "_"):
                 answer = False
+                break
               
         return answer
       else:
         return False
             
-    def invalid_check_bishop(self,in_pos,new_pos):
-        piece_index = self.index_finder(in_pos)
+    def invalid_check_bishop(self,initial_position,new_position):
+        piece_index = self.index_finder(initial_position)
         answer=True
-        if(self.pawns[piece_index].invalid_check_move(new_pos)):
-            if(in_pos[0]>new_pos[0] and in_pos[1]<new_pos[1]):
-                for i in range(1,abs(in_pos[0]-new_pos[0]+1)):
-                    if(self.board[in_pos[0]-i][in_pos[1]+i] != "_"):
+        if(self.pieces[piece_index].invalid_check_move(new_position)):
+            if(initial_position[0]>new_position[0] and initial_position[1]<new_position[1]):
+                for i in range(1,abs(initial_position[0]-new_position[0]+1)):
+                    if(self.board[initial_position[0]-i][initial_position[1]+i] != "_"):
                         answer=False
-            elif(in_pos[0]>new_pos[0] and in_pos[1]>new_pos[1]):
-                for i in range(1,abs(in_pos[0]-new_pos[0]+1)):
-                    if(self.board[in_pos[0]-i][in_pos[1]-i] != "_"):
+                        break
+            elif(initial_position[0]>new_position[0] and initial_position[1]>new_position[1]):
+                for i in range(1,abs(initial_position[0]-new_position[0]+1)):
+                    if(self.board[initial_position[0]-i][initial_position[1]-i] != "_"):
                         answer=False
-            elif(in_pos[0]<new_pos[0] and in_pos[1]>new_pos[1]):
-                for i in range(1,abs(in_pos[0]-new_pos[0])+1):
-                    if(self.board[in_pos[0]+i][in_pos[1]-i] != "_"):
+                        break
+            elif(initial_position[0]<new_position[0] and initial_position[1]>new_position[1]):
+                for i in range(1,abs(initial_position[0]-new_position[0])+1):
+                    if(self.board[initial_position[0]+i][initial_position[1]-i] != "_"):
                         answer=False
+                        break
             else:
-                for i in range(1,abs(in_pos[0]-new_pos[0])+1):
-                    if(self.board[in_pos[0]+i][in_pos[1]+i] != "_"):
+                for i in range(1,abs(initial_position[0]-new_position[0])+1):
+                    if(self.board[initial_position[0]+i][initial_position[1]+i] != "_"):
                         answer=False
+                        break
             return answer
         else:
             return False
-    def move_bishop(self,in_pos,new_pos):
-        piece_index = self.index_finder(in_pos)
-        if(self.invalid_check_bishop(in_pos,new_pos)):
-            self.pawns[piece_index].position = new_pos
+        
+    def move_bishop(self,initial_position,new_position):
+        piece_index = self.index_finder(initial_position)
+        if(self.invalid_check_bishop(initial_position,new_position)):
+            self.pieces[piece_index].position = new_position
             self.update_board()  
         else:
-          print("Arre maa chudi padhi hai")
-        
-                
-                    
-        
+          print("Arre maa chudi padhi hai -bishop")
+           
             
-    def move_rook(self,in_pos,new_pos):
-      piece_index = self.index_finder(in_pos)
-      if(self.invalid_check_rook(in_pos,new_pos)):
-        self.pawns[piece_index].position = new_pos
+    def move_rook(self,initial_position,new_position):
+      piece_index = self.index_finder(initial_position)
+      if(self.invalid_check_rook(initial_position,new_position)):
+        self.pieces[piece_index].position = new_position
         self.update_board()  
       else:
-        print("Arre maa chudi padhi hai")
+        print("Arre maa chudi padhi hai  -rook")
+      
+    def move_queen(self,initial_position,new_position):  
+        piece_index = self.index_finder(initial_position)       
+        if (initial_position[0] ==new_position[0] or new_position[1] == initial_position[1]):
+            if(self.invalid_check_rook(initial_position,new_position)):
+                self.pieces[piece_index].position = new_position
+                self.update_board()
+        elif(abs(initial_position[0]-new_position[0])==abs(initial_position[1]-new_position[1])):
+            if(self.invalid_check_bishop(initial_position,new_position)):
+                self.pieces[piece_index].position = new_position
+                self.update_board()
+                
+        else:
+            print("Maa chudi padi hai -queen")
       
       
-      
-      
-    def move_pawn(self,input_position,new_pos):
-        pawn_index = self.index_finder(input_position)
-        if(self.invalid_check(new_pos,pawn_index)):
-            self.pawns[pawn_index].position = new_pos
+    def move_pawn(self,initial_position,new_position):
+        piece_index = self.index_finder(initial_position)
+        if(self.invalid_check(new_position,piece_index)):
+            self.pieces[piece_index].position = new_position
             self.update_board( )
         else:
-            print("Are Maa Chudi Padi Hai")
+            print("Are Maa Chudi Padi Hai  -pawn")
             
             
             
-    def move(self,input_position,new_pos):
-      piece_index = self.index_finder(input_position) 
-      piece = self.pawns[piece_index].symbol
+    def move(self,initial_position,new_position):
+      piece_index = self.index_finder(initial_position) 
+      piece = self.pieces[piece_index].symbol
       if(piece == "P"):
-        self.move_pawn(input_position,new_pos)
+        self.move_pawn(initial_position,new_position)
         pass
       elif(piece == "R"):
-        self.move_rook(input_position,new_pos)
+        self.move_rook(initial_position,new_position)
         pass
       elif(piece == "B"):
-          self.move_bishop(input_position,new_pos)
+          self.move_bishop(initial_position,new_position)
           pass
+      elif(piece == "Q"):
+          self.move_queen(initial_position,new_position)
           
-        
-        
-        
         
     def print_board(self):
         for i in range(8):
@@ -234,12 +286,10 @@ class chessboard():
                 print(self.board[i][j],end = '   ')
             print(end = "\n\n")
     
-    
-    
     def delete_pieces(self,position):
-        self.deleted.append(self.pawns[self.index_finder(position)])
-        self.pawns[self.index_finder(position)].is_on_board = False
-        self.pawns.remove(self.pawns[self.index_finder(position)])
+        self.deleted.append(self.pieces[self.index_finder(position)])
+        self.pieces[self.index_finder(position)].is_on_board = False
+        self.pieces.remove(self.pieces[self.index_finder(position)])
         
         self.update_board()
     
@@ -247,6 +297,16 @@ class chessboard():
     
 game = chessboard()
 game.update_board()
+game.move([6,3], [5,3])
+game.move([7,3],[6,3])
+game.move([6,3],[4,1])
+# game.move([2,0],[4,2])
+# game.move([6,4],[5,4])
+# game.takes_takes([4,2], [7,5])
+# game.takes_takes([7,7],[7,5])
+
+
+
 
 
 
