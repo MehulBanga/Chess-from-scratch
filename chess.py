@@ -164,7 +164,7 @@ class chessboard():
             self.pieces[new_piece_index].position = takes_position
             self.update_board()
         else:
-          print("are maa chudi padi hai - chessboard")
+          print("Error - chessboard")
          
     def invalid_check_rook(self,initial_position,new_position):
       piece_index = self.index_finder(initial_position)
@@ -231,7 +231,7 @@ class chessboard():
             self.pieces[piece_index].position = new_position
             self.update_board()  
         else:
-          print("Arre maa chudi padhi hai -bishop")
+          print("Error -bishop")
            
             
     def move_rook(self,initial_position,new_position):
@@ -240,7 +240,7 @@ class chessboard():
         self.pieces[piece_index].position = new_position
         self.update_board()  
       else:
-        print("Arre maa chudi padhi hai  -rook")
+        print("Error  -rook")
       
     def move_queen(self,initial_position,new_position):  
         piece_index = self.index_finder(initial_position)       
@@ -254,7 +254,7 @@ class chessboard():
                 self.update_board()
                 
         else:
-            print("Maa chudi padi hai -queen")
+            print("Error -queen")
       
       
     def move_pawn(self,initial_position,new_position):
@@ -263,7 +263,7 @@ class chessboard():
             self.pieces[piece_index].position = new_position
             self.update_board( )
         else:
-            print("Are Maa Chudi Padi Hai  -pawn")
+            print("Error  -pawn")
             
             
     def move(self,initial_position,new_position):
